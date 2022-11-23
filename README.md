@@ -1,4 +1,4 @@
-# fzd_multijob - App for LB-Phone
+# FzD Multijob - App for LB-Phone
 
 This is an app I create for LB-Phone, in this read me you will be told how to install the for your phone.
 
