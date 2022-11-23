@@ -7,6 +7,10 @@ title "LB Phone - App Template"
 description "A template for creating apps for the LB Phone."
 author "Breze"
 
+shared_scripts {
+    'config.lua'
+}
+
 client_scripts {
     "client/cl_main.lua",
 }

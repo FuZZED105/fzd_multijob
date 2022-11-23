@@ -17,7 +17,7 @@ window.addEventListener("load", () => {
         document.getElementById("phone-wrapper").style.marginTop = window.innerHeight/2 - 960/2 + "px";
         document.getElementById("phone-wrapper").style.marginLeft = window.innerWidth/2 - 540/2 + "px";
     }
-    
+
     center();
     window.addEventListener("resize", center);
 })

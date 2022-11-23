@@ -22,6 +22,11 @@ html, body {
     overflow: hidden;
 }
 
+.light {
+    background-color: white;
+    color: black;
+}
+
 .app-header {
     display: flex;
     flex-direction: row;
@@ -55,7 +60,14 @@ html, body {
     border-radius: 1rem;
     padding: 1rem;
     box-sizing: border-box;
-    cursor: pointer;
+}
+
+.job-card-light {
+    width: 100%;
+    background-color: rgb(202, 202, 202);
+    border-radius: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 .job-name {
@@ -70,16 +82,47 @@ html, body {
 }
 
 .job-status {
+    margin-top: 1.5rem;
+    background-color: rgb(40, 40, 40);
+    padding: 0.8rem 0.5rem;
+    border-radius: 0.5rem;
     font-size: 20px;
-    margin-bottom: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
 }
 
-button {
-    width: 10rem;
-    height: 4rem;
-    background-color: green;
-
+.job-status-light {
+    margin-top: 1.5rem;
+    background-color: rgb(170, 170, 170);
+    padding: 0.8rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 20px;
     cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+}
+
+.job-remove {
+    margin-top: 0.5rem;
+    background-color: rgb(40, 40, 40);
+    padding: 0.8rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+}
+
+.job-remove-light {
+    margin-top: 0.5rem;
+    background-color: rgb(170, 170, 170);
+    padding: 0.8rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
 }
 
 #phone-wrapper {

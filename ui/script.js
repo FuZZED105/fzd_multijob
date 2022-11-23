@@ -1,102 +1,64 @@
-var PlayerJobs = []
+var job = 'unemployed';
+var grade = 0;
 
-$(document).ready(function(){
+async function addJob(info) {
+    var status = 'SELECT';
+    var removeButton = '';
+    var removeable = 'hidden';
 
-    $("body").on("click", ".job-card", function(e) {
-        e.preventDefault();
-
-        var jobData = $(this).data('jobData');
-
-        if (jobData.active) {
-            SetPopUp({
-                title: "Go Off Duty",
-                description: "Are you sure you want to go off duty?",
-                buttons: [
-                    {
-                        title: "Cancel",
-                        color: "red"
-                    },
-                    {
-                        title: "Confirm",
-                        cb: () => {
-                            $.post('https://fzd_multijob/setActiveJob', JSON.stringify({
-                                job: jobData
-                            })).done(function(data) {
-                                $("#jobs").empty();
-                                getPlayerJobs()
-                            });
-                        }
-                    }
-                ]
-            })
-        } else {
-            SetPopUp({
-                title: "Go On Duty",
-                description: `Are you sure you want to go on duty as this ${jobData.label}?`,
-                buttons: [
-                    {
-                        title: "Cancel",
-                        color: "red"
-                    },
-                    {
-                        title: "Accept",
-                        cb: () => {
-                            $.post('https://fzd_multijob/setActiveJob', JSON.stringify({
-                                job: jobData
-                            })).done(function(data) {
-                                $("#jobs").empty();
-                                getPlayerJobs()
-                            });
-                        }
-                    }
-                ]
-            })
-        }
-    });
-});
-
-async function getPlayerJobs() {
-    await $.post('https://fzd_multijob/getPlayerJobs', JSON.stringify({}), function(jobs) {
-        PlayerJobs = jobs;
-    });
-
-    // for (let i = 0; i < PlayerJobs.length; i++) {
-    //     const job = PlayerJobs[i];
-
-    //     $("#jobs").append(`
-    //         <div class="job-card data-job=${job.name}">
-    //             <div class="job-name">${job.label}</div>
-    //             <div class="job-grade">${job.gradeLabel}</div>
-    //             <div class="job-status">${job.active && 'On Duty' || 'Off Duty'}</div>
-    //         </div>
-    //     `);
-    // }
-
-    if (PlayerJobs.length > 0) {
-        $.each(PlayerJobs, function(index, job) {
-            var elem = `
-                <div class="job-card" id="job-${index}">
-                    <div class="job-name">${job.label}</div>
-                    <div class="job-grade">${job.gradeLabel}</div>
-                    <div class="job-status">${job.active && 'On Duty' || 'Off Duty'}</div>
-                </div>
-            `
-            $("#jobs").append(elem);
-            $(`#job-${index}`).data('jobData', job)
-        });
+    if (info.name == job && info.grade == grade) {
+        status = 'SELECTED';
     }
+
+    if (info.removeable) {
+        removeable = '';
+        removeButton = `<div class="job-remove" data-job="${info.name}" data-grade="${info.grade}">REMOVE</div>`;
+    }
+
+    var jobPanel = `
+        <div class="job-card">
+            <div class="job-name">${info.label}</div>
+            <div class="job-grade">${info.gradeLabel}</div>
+            <div class="job-status" data-job="${info.name}" data-grade="${info.grade}">${status}</div>
+            ${removeButton}
+        </div>
+    `
+
+    $("#jobs").append(jobPanel);
 }
 
 window.addEventListener("load", () => {
-    getPlayerJobs();
-});
+    $.post('https://fzd_multijob/getJobs', JSON.stringify({}), function(data) {
+        job = data.job.job;
+        grade = data.job.grade;
 
-window.addEventListener('message', function(event) {
-    console.log(event.data.type)
-    switch (event.data.type) {
-        case "refreshJobs":
-            $("#jobs").html("");
-            console.log('test')
-            break;
-    };
+        const jobs = JSON.parse(data.jobs);
+
+        for (i = 0; i < jobs.length; i++) {
+            addJob(jobs[i]);
+        }
+    });
+
+    $("body").on("click", ".job-status", function(e) {
+        e.preventDefault();
+
+        $(document).find(".job-status").text('SELECT');
+        $(this).text('SELECTED');
+
+        $.post('https://fzd_multijob/changejob', JSON.stringify({
+            job: this.dataset.job,
+            grade: this.dataset.grade
+        }));
+    });
+
+    $("body").on("click", ".job-remove", function(e) {
+        e.preventDefault();
+
+        $(this).parent().fadeOut();
+
+        $.post('https://fzd_multijob/removejob', JSON.stringify({
+            job: this.dataset.job,
+            grade: this.dataset.grade
+        }));
+    });
 });
