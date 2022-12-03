@@ -48,12 +48,14 @@ RegisterNetEvent('QBCore:Client:OnJobUpdate', function()
 end)
 
 RegisterNUICallback('getJobs', function(data, cb)
+    if LocalPlayer.state['isLoggedIn'] then
     QBCore.Functions.TriggerCallback('fzd_multijob:getJobs', function(jobs)
         cb({
             job = { job = job, grade = grade },
             jobs = json.encode(jobs)
         })
-    end)
+        end)
+    end
 end)
 
 RegisterNUICallback('removejob', function(data)
